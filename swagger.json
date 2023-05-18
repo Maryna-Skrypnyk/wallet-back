@@ -1,0 +1,996 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "1.0.0",
+        "title": "Wallet",
+        "description": "REST API Application",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Users",
+            "description": "Authorization endpoints"
+        },
+        {
+            "name": "Transactions",
+            "description": "Transactions endpoints"
+        },
+        {
+            "name": "Categories",
+            "description": "Categories endpoints"
+        }
+    ],
+    "paths": {
+        "/api/users/signup": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User registration",
+                "parameters": [],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "qwerty123"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Tom"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "description": "responses status",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "description": "responses code",
+                                            "example": "201"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "responses message",
+                                            "example": "User created"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "description": "responses data",
+                                            "example": {
+                                                "id": "60d9f35e8a52085120891b18",
+                                                "name": "Tom",
+                                                "email": "user@example.com",
+                                                "avatar": "https://path.to.user.avatar",
+                                                "successEmail": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "409"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email is already in use"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Field email must be a valid email"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User authentication",
+                "parameters": [],
+                "requestBody": {
+                    "description": "Authentication's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "qwerty123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "description": "responses status",
+                                            "example": "success"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "description": "responses code",
+                                            "example": "200"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "responses code",
+                                            "example": "You have logged in"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "description": "responses data",
+                                            "example": {
+                                                "token": "User token"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Email doesn't exist / Password is wrong",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "401"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email or password is wrong"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/logout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Logout",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {}
+                    },
+                    "400": {
+                        "description": "No token provided",
+                        "content": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid access token)",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "Invalid user / Invalid session",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/users/verify": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User verification via e-mail",
+                "parameters": [],
+                "requestBody": {
+                    "description": "Resending email verification",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Email has not been verified",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/auth/google": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Google authentication ",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {}
+                    },
+                    "403": {
+                        "description": "Not registered or registered with postman",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/users/current": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Current user",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation (redirect to front-end with token in query). Then use GET /user/info",
+                        "content": {}
+                    },
+                    "403": {
+                        "description": "Not registered",
+                        "content": {}
+                    },
+                    "security": [
+                        {
+                            "Bearer": []
+                        }
+                    ]
+                }
+            }
+        },
+        "/api/users/verify/:verifyToken": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "verifyToken",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation (redirect to front-end with token in query). Then use GET /user/info",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {}
+                    },
+                    "security": [
+                        {
+                            "Bearer": []
+                        }
+                    ]
+                }
+            }
+        },
+        "/api/users/avatars": {
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User avatar",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "avatar",
+                        "in": "query",
+                        "description": "upload a new avatar",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {}
+                    },
+                    "security": [
+                        {
+                            "Bearer": []
+                        }
+                    ]
+                }
+            }
+        },
+        "/api/users/update": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User info update",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "description": "User info change",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Nick"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "content": {}
+                    },
+                    "security": [
+                        {
+                            "Bearer": []
+                        }
+                    ]
+                }
+            }
+        },
+        "/api/transactions": {
+            "post": {
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Create a new transaction",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "description": "Transaction's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "default": "income or spend",
+                                        "example": "spend or income"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "example": "14.11.2021"
+                                    },
+                                    "money": {
+                                        "type": "Number",
+                                        "example": "1000"
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": "Gif"
+                                    },
+                                    "category": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Other"
+                                            },
+                                            "id": {
+                                                "type": "string",
+                                                "example": "345e5677e78934c90f67"
+                                            }
+                                        }
+
+        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Transaction"
+                                }
+                            }
+                            
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body) / No token provided",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Error"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "400"
+                                        }
+                                    }
+                                },
+                                "401": {
+                                    "description": "Unauthorized (invalid access token)",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "Error"
+                                                    },
+                                                    "code": {
+                                                        "type": "number",
+                                                        "example": "401"
+                                                    }
+                                                }
+                                            },
+                                            "500": {
+                                                "description": "Internal Server Error",
+                                                "content": {
+                                                    "application/json": {
+                                                        "schema": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "status": {
+                                                                    "type": "string",
+                                                                    "example": "Fail"
+                                                                },
+                                                                "code": {
+                                                                    "type": "number",
+                                                                    "example": "500"
+                                                                },
+                                                                "message": {
+                                                                    "type": "string",
+                                                                    "example": "Internal Server Error"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/{transactions}": {
+            "get": {
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Get all transactions. Can be filtered by month and year",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Transaction"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid access token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Error"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "401"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Fail"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "500"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/statistics": {
+            "get": {
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Get all transactions. Can be filtered by month and year",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Statistics"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid access token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Error"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "401"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Fail"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "500"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get all categories",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema":{
+                                 "$ref": "#/components/schemas/Category"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (invalid access token)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Error"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "401"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Fail"
+                                        },
+                                        "code": {
+                                            "type": "number",
+                                            "example": "500"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "6193b4f36a453535c5b9cfe3"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "$2a$10$7/ZJpglAhQnMKAmshacmSe.Gx8pMni4jDIVPykJ9.gGobeZCsYqou"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "user@example.com"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Nick"
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "user token"
+                    },
+                    "idUserCloud": {
+                        "type": "string",
+                        "example": "n8wzoryzzbyojdunoqmf"
+                    },
+                    "verify": {
+                        "type": "boolean",
+                        "example": "true"
+                    },
+                    "verifyToken": {
+                        "type": "string",
+                        "example": "token"
+                    },
+                    "avatarURL": {
+                        "type": "string",
+                        "example": "https://path.to.user.avatar"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "example": "2021-11-16T13:41:07.193+00:00"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "example": "2021-11-16T13:48:44.991+00:00"
+                    }
+                }
+            },
+            "Transaction": {
+                "type": "object",
+                "properties": {
+                    "date": {
+                        "type": "String",
+                        "examplet": "17.11.2021"
+                    },
+                    "type": {
+                      "type": "String",
+                      "enum": "['spend', 'income']",
+                      "default": "income"
+                    },
+                    "category": {
+                      "type": "object",
+                      "properties":{
+                          "name":{
+                              "type":"String",
+                              "example":"Eat"
+                          },
+                          "id":{
+                              "type":"string",
+                              "example":"6587q6gjhGKJHoiuo"
+                          }
+                      },
+                      "example": "Other"
+                    },
+                    "money": {
+                      "type": "Number",
+                      "example": "1000"
+                    },
+                    "balance": {
+                      "type": "Number",
+                      "example": "10000"
+                    },
+                    "month": {
+                      "type": "String",
+                      "example": "11"
+                      },
+                    "year": {
+                      "type": "String",
+                      "example": "2021"
+                    },
+                    "comment": {
+                      "type": "String",
+                      "example":"Gif"},
+                    "owner": {
+                      "type": "string",
+                      "exampl":"7678yjfahbjbh"
+                    }
+                }
+                
+            },
+            "Category": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Eat"
+                    },
+                    "id": {
+                        "type":"String",
+                        "example": "54362576gjhVNHVG87867"
+                    }
+                }
+            },
+            "Statistics": {
+                "type": "object",
+                "properties": {
+                    "data":{
+                        "type":"object",
+                        "properties": {
+                            "categoriesSummary":{
+                                "type":"object",
+                                "example":"Other"
+                            },
+                            "totalIncome":{
+                                "type":"Number",
+                                "example": 2000
+                            },
+                            "totalSpend": {
+                                "type": "Number",
+                                "example": 1000
+                            },
+                            "uniqueMonth": {
+                                "type":"number",
+                                "example":11
+                            },
+                            "uniqueYear": {
+                                "type": "number",
+                                "example": 2021
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securitySchemes": {
+        "Bearer": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+        }
+    }
+}
